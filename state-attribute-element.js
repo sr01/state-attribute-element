@@ -6,19 +6,25 @@ class StateAttributeElement extends HTMLElement {
     const show_empty = this.config.show_empty
     const attr = this.config.attribute
     const sub_attribute = this.config.sub_attribute || ''
-    this.state = hass.states[entityId].attributes[attr]
-    if (this.config.sub_attribute) {
-      this.state = hass.states[entityId].attributes[attr][sub_attribute]
-    }
-    const card = document.createElement('state-attribute-element');
-    if (this.state) {
-      if (this.state.length != 0 || show_empty === true) {
-        this.innerHTML = `${prefix_string}${this.state}${suffix_string}`
-      }
-    }
-    else {
-      this.innerHTML = 'Attribute: ' + attr + ' does not exist in entity: ' + entityId + '.'
-    }
+	this.entity = hass.states[entityId]
+	if (this.entity != undefined) {
+		this.state = hass.states[entityId].attributes[attr]
+		if (this.config.sub_attribute) {
+		  this.state = hass.states[entityId].attributes[attr][sub_attribute]
+		}
+		const card = document.createElement('state-attribute-element');
+		if (this.state) {
+		  if (this.state.length != 0 || show_empty === true) {
+			this.innerHTML = `${prefix_string}${this.state}${suffix_string}`
+		  }
+		}
+		else {
+		  this.innerHTML = 'Attribute: ' + attr + ' does not exist in entity: ' + entityId + '.'
+		}
+	}
+	else {
+	  this.innerHTML = '??'
+	}
   }
   setConfig(config) {
     this.config = JSON.parse(JSON.stringify(config));
